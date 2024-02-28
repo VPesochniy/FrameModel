@@ -4,9 +4,15 @@ import java.util.*;
 class Frame implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    private static Frame prototypeInstance;
+
     private String name;
     private Map<String, String> slots;
     private List<Frame> linkedFrames;
+
+    private Frame() {
+        this.slots = new HashMap<>();
+    }
 
     public Frame(String name) {
         this.name = name;
@@ -24,6 +30,10 @@ class Frame implements Serializable {
 
     public void removeSlot(String slotName) {
         slots.remove(slotName);
+    }
+
+    public void removeAllSlots() {
+        slots.clear();
     }
 
     public void updateSlot(String slotName, String value) {
@@ -53,10 +63,17 @@ class Frame implements Serializable {
     }
 
     public String getName() {
-        return name;
+        if (name == null) {
+            return "Instance of prototype";
+        } else
+            return name;
     }
 
-    public boolean matchesPrototype(Frame prototype) {
+    public boolean matchesPrototypeByName(Frame prototype) {
+        return name == prototype.name;
+    }
+
+    public boolean matchesPrototypeBySlot(Frame prototype) {
         for (Map.Entry<String, String> entry : prototype.slots.entrySet()) {
             String slotName = entry.getKey();
             String slotValue = entry.getValue();
@@ -65,5 +82,16 @@ class Frame implements Serializable {
             }
         }
         return true;
+    }
+
+    public static Frame getFramePrototype() {
+        if (prototypeInstance == null) {
+            return new Frame();
+        } else
+            return prototypeInstance;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

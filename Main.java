@@ -36,21 +36,35 @@ public class Main {
         personFrame.display();
 
         // Удаление слота
-        carFrame.removeSlot("Brand");
+        // carFrame.removeSlot("Brand");
         carFrame.display();
 
         frames.add(personFrame);
         frames.add(carFrame);
 
-        Frame searchPrototype = new Frame("Person");
-        searchPrototype.addSlot("Age", "35");
+        Frame searchPrototype = Frame.getFramePrototype();
+        searchPrototype.addSlot("Brand", "Toyota");
+        searchPrototype.addSlot("Model", "Camry");
+        searchPrototype.setName("Car");
 
-        List<Frame> matchingFrames = findFrames(frames, searchPrototype);
+        System.out.println(searchPrototype.getName());
 
-        // System.out.println("Matching Frames: ");
-        // for (Frame frame : matchingFrames) {
-        // frame.display();
-        // }
+        for (int i = 0; i < 10; i++) {
+            System.out.println();
+        }
+
+        List<Frame> matchingFramesBySlot = findFramesBySlot(frames, searchPrototype);
+        List<Frame> matchingFramesByName = findFramesByName(frames, searchPrototype);
+
+        System.out.println("Matching Frames By Slot: ");
+        for (Frame frame : matchingFramesBySlot) {
+            frame.display();
+        }
+
+        System.out.println("Matching Frames By Name: ");
+        for (Frame frame : matchingFramesByName) {
+            frame.display();
+        }
 
         System.out.println("Frames Quantity: " + frames.size());
 
@@ -75,10 +89,20 @@ public class Main {
         }
     }
 
-    private static List<Frame> findFrames(List<Frame> frames, Frame prototype) {
+    private static List<Frame> findFramesBySlot(List<Frame> frames, Frame prototype) {
         List<Frame> matchingFrames = new ArrayList<>();
         for (Frame frame : frames) {
-            if (frame.matchesPrototype(prototype)) {
+            if (frame.matchesPrototypeBySlot(prototype)) {
+                matchingFrames.add(frame);
+            }
+        }
+        return matchingFrames;
+    }
+
+    private static List<Frame> findFramesByName(List<Frame> frames, Frame prototype) {
+        List<Frame> matchingFrames = new ArrayList<>();
+        for (Frame frame : frames) {
+            if (frame.matchesPrototypeByName(prototype)) {
                 matchingFrames.add(frame);
             }
         }

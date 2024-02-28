@@ -86,9 +86,9 @@ class Frame implements Serializable {
 
     public static Frame getFramePrototype() {
         if (prototypeInstance == null) {
-            return new Frame();
-        } else
-            return prototypeInstance;
+            prototypeInstance = new Frame();
+        }
+        return prototypeInstance;
     }
 
     public void setName(String name) {

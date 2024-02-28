@@ -1,6 +1,9 @@
+import java.io.Serializable;
 import java.util.*;
 
-class Frame {
+class Frame implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String name;
     private Map<String, String> slots;
     private List<Frame> linkedFrames;
@@ -13,6 +16,10 @@ class Frame {
 
     public void addSlot(String slotName, String value) {
         slots.put(slotName, value);
+    }
+
+    public String getSlotValue(String slotName) {
+        return slots.get(slotName);
     }
 
     public void removeSlot(String slotName) {
@@ -47,5 +54,16 @@ class Frame {
 
     public String getName() {
         return name;
+    }
+
+    public boolean matchesPrototype(Frame prototype) {
+        for (Map.Entry<String, String> entry : prototype.slots.entrySet()) {
+            String slotName = entry.getKey();
+            String slotValue = entry.getValue();
+            if (!slots.containsKey(slotName) || !slots.get(slotName).contains(slotValue)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

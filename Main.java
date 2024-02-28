@@ -5,70 +5,93 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
+    private static final Scanner scanner = new Scanner(System.in);
     private static final String FILENAME = "frames.ser";
+    private static List<Frame> frames;
 
     public static void main(String[] args) {
-        List<Frame> frames = loadFrames();
+        frames = loadFrames();
         if (frames == null) {
             frames = new ArrayList<>();
         }
-        // Создание нескольких фреймов
-        Frame personFrame = new Frame("Person");
-        Frame carFrame = new Frame("Car");
+        boolean exit = false;
+        while (!exit) {
+            System.out.println("Меню:");
+            System.out.println("1. Добавить фрейм");
+            System.out.println("2. Поиск фрейма");
+            System.out.println("3. Вывести все фреймы");
+            System.out.println("4. Выход");
+            System.out.print("Выберите действие: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // очистка буфера после ввода числа
 
-        // Добавление слотов
-        personFrame.addSlot("Name", "John");
-        personFrame.addSlot("Age", "30");
-        carFrame.addSlot("Brand", "Toyota");
-        carFrame.addSlot("Model", "Camry");
+            switch (choice) {
+                case 1:
+                    addFrame();
+                    break;
+                case 2:
+                    searchFrame();
+                    break;
+                case 3:
+                    displayAllFrames();
+                    break;
+                case 4:
+                    exit = true;
+                    System.out.println("Выход из программы...");
+                    saveFrames(frames);
+                    break;
+                default:
+                    System.out.println("Неверный ввод. Пожалуйста, выберите действие из меню.");
+            }
+        }
+        scanner.close();
+    }
 
-        // Формирование связи между фреймами
-        personFrame.addLinkedFrame(carFrame);
+    private static void displayAllFrames() {
+        System.out.println("Все фреймы:");
+        for (Frame frame : frames) {
+            frame.display();
+        }
+    }
 
-        // Отображение информации о фреймах
-        personFrame.display();
-        carFrame.display();
-
-        // Изменение слота
-        personFrame.updateSlot("Age", "35");
-        personFrame.display();
-
-        // Удаление слота
-        // carFrame.removeSlot("Brand");
-        carFrame.display();
-
-        frames.add(personFrame);
-        frames.add(carFrame);
-
+    private static void searchFrame() {
         Frame searchPrototype = Frame.getFramePrototype();
-        searchPrototype.addSlot("Brand", "Toyota");
-        searchPrototype.addSlot("Model", "Camry");
-        searchPrototype.setName("Car");
-
-        System.out.println(searchPrototype.getName());
-
-        for (int i = 0; i < 10; i++) {
-            System.out.println();
+        System.out.print("Введите количество слотов в поисковом образце: ");
+        int slotsCount = scanner.nextInt();
+        scanner.nextLine(); // очистка буфера после ввода числа
+        for (int i = 0; i < slotsCount; i++) {
+            System.out.print("Введите название слота: ");
+            String slotName = scanner.nextLine();
+            System.out.print("Введите значение слота: ");
+            String slotValue = scanner.nextLine();
+            searchPrototype.addSlot(slotName, slotValue);
         }
-
-        List<Frame> matchingFramesBySlot = findFramesBySlot(frames, searchPrototype);
-        List<Frame> matchingFramesByName = findFramesByName(frames, searchPrototype);
-
-        System.out.println("Matching Frames By Slot: ");
-        for (Frame frame : matchingFramesBySlot) {
+        List<Frame> matchingFrames = findFramesBySlot(frames, searchPrototype);
+        System.out.println("Найденные фреймы:");
+        for (Frame frame : matchingFrames) {
             frame.display();
         }
+    }
 
-        System.out.println("Matching Frames By Name: ");
-        for (Frame frame : matchingFramesByName) {
-            frame.display();
+    private static void addFrame() {
+        System.out.print("Введите название фрейма: ");
+        String frameName = scanner.nextLine();
+        Frame frame = new Frame(frameName);
+        System.out.print("Введите количество слотов: ");
+        int slotsCount = scanner.nextInt();
+        scanner.nextLine(); // очистка буфера после ввода числа
+        for (int i = 0; i < slotsCount; i++) {
+            System.out.print("Введите название слота: ");
+            String slotName = scanner.nextLine();
+            System.out.print("Введите значение слота: ");
+            String slotValue = scanner.nextLine();
+            frame.addSlot(slotName, slotValue);
         }
-
-        System.out.println("Frames Quantity: " + frames.size());
-
-        saveFrames(frames);
+        frames.add(frame);
+        System.out.println("Фрейм успешно добавлен.");
     }
 
     @SuppressWarnings("unchecked")

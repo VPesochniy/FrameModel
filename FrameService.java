@@ -33,22 +33,17 @@ public class FrameService implements Constants {
         if (frames.isEmpty()) {
             System.out.println("Список пуст");
         } else {
-            System.out.println("\nНачало списка\n");
+            System.out.println("\n\n\t\tНачало списка\n\n");
             for (Frame fr : frames) {
                 System.out.println(fr.toString());
             }
-            System.out.println("\nКонец списка\n");
+            System.out.println("\n\n\t\tКонец списка\n\n");
 
         }
     }
 
     public List<Frame> getFrames() {
         return frames;
-    }
-
-    public List<Frame> findFramesBySlot(List<Frame> frames, Frame prototype) {
-        FindFrame ff = new FindFrameBySlot();
-        return ff.find(frames, prototype);
     }
 
     public List<Frame> findFramesByName(List<Frame> frames, Frame prototype) {
@@ -71,27 +66,31 @@ public class FrameService implements Constants {
             frame.addSlot(slotName, slotValue);
         }
         frames.add(frame);
-        System.out.println("Фрейм успешно добавлен.");
+        System.out.println("Фрейм успешно добавлен\n\n");
     }
 
-    public void searchFrame() {
-        Frame searchPrototype = Frame.getFramePrototype();
-        System.out.print("Введите количество слотов в поисковом образце: ");
-        int slotsCount = SCANNER.nextInt();
-        SCANNER.nextLine(); // очистка буфера после ввода числа
-        for (int i = 0; i < slotsCount; i++) {
-            System.out.print("Введите название слота: ");
-            String slotName = SCANNER.nextLine();
-            System.out.print("Введите значение слота: ");
-            String slotValue = SCANNER.nextLine();
-            searchPrototype.addSlot(slotName, slotValue);
-        }
+    public void searchFrameBySlot() {
+        MakeFramePrototype mfp = new MakeFramePrototypeWithSlot();
+        Frame searchPrototype = mfp.getPrototype();
 
-        List<Frame> matchingFrames = findFramesBySlot(frames, searchPrototype);
-        System.out.println("Найденные фреймы:");
+        FindFrame ff = new FindFrameBySlot();
+        List<Frame> matchingFrames = ff.find(frames, searchPrototype);
+        System.out.println("\n\nНайденные фреймы:\n\n");
         for (Frame frame : matchingFrames) {
             System.out.println(frame.toString());
+        }
 
+    }
+
+    public void searchFrameByName() {
+        MakeFramePrototype mfp = new MakeFramePrototypeWithName();
+        Frame searchPrototype = mfp.getPrototype();
+
+        FindFrame ff = new FindFrameByName();
+        List<Frame> matchingFrames = ff.find(frames, searchPrototype);
+        System.out.println("\n\nНайденные фреймы:\n\n");
+        for (Frame frame : matchingFrames) {
+            System.out.println(frame.toString());
         }
 
     }

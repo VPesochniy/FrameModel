@@ -24,10 +24,6 @@ class Frame implements Serializable {
         slots.put(slotName, value);
     }
 
-    public String getSlotValue(String slotName) {
-        return slots.get(slotName);
-    }
-
     public void removeSlot(String slotName) {
         slots.remove(slotName);
     }
@@ -48,40 +44,11 @@ class Frame implements Serializable {
         linkedFrames.remove(frame);
     }
 
-    // Метод для отображения информации о фрейме
-    public void display() {
-        System.out.println("Frame: " + name);
-        System.out.println("Slots:");
-        for (Map.Entry<Object, String> entry : slots.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
-        }
-        System.out.println("Linked Frames:");
-        for (Frame frame : linkedFrames) {
-            System.out.println(frame.getName());
-        }
-        System.out.println();
-    }
-
     public String getName() {
         if (name == null) {
-            return "Instance of prototype";
+            return "Prototype instance";
         } else
             return name;
-    }
-
-    public boolean matchesPrototypeByName(Frame prototype) {
-        return name == prototype.name;
-    }
-
-    public boolean matchesPrototypeBySlot(Frame prototype) {
-        for (Map.Entry<Object, String> entry : prototype.slots.entrySet()) {
-            Object slotName = entry.getKey();
-            String slotValue = entry.getValue();
-            if (!slots.containsKey(slotName) || !slots.get(slotName).contains(slotValue)) {
-                return false;
-            }
-        }
-        return true;
     }
 
     public static Frame getFramePrototype() {
@@ -98,6 +65,47 @@ class Frame implements Serializable {
     @Override
     public String toString() {
         return "Frame [name=" + name + ", slots=" + slots + ", linkedFrames=" + linkedFrames + "]";
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((slots == null) ? 0 : slots.hashCode());
+        result = prime * result + ((linkedFrames == null) ? 0 : linkedFrames.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Frame other = (Frame) obj;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        if (slots == null) {
+            if (other.slots != null)
+                return false;
+        } else if (!slots.equals(other.slots))
+            return false;
+        if (linkedFrames == null) {
+            if (other.linkedFrames != null)
+                return false;
+        } else if (!linkedFrames.equals(other.linkedFrames))
+            return false;
+        return true;
+    }
+
+    public Map<Object, String> getSlots() {
+        return slots;
     }
 
 }

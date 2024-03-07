@@ -1,10 +1,9 @@
-public class MakeFramePrototypeWithSlot implements MakeFramePrototype, Constants {
-
-    @Override
-    public Frame getPrototype() {
-        Frame searchPrototype = Frame.getFramePrototype();
-        searchPrototype.removeAllSlots();
-        System.out.print("Введите количество слотов в поисковом образце: ");
+public class MakeFrame implements Constants {
+    public static Frame getFrame() {
+        System.out.print("\n\nВведите название фрейма: ");
+        String frameName = SCANNER.nextLine();
+        Frame frame = new Frame(frameName);
+        System.out.print("Введите количество слотов: ");
         while (!SCANNER.hasNextInt()) {
             System.out.println("Ошибка! Пожалуйста, введите целое число:");
             SCANNER.next(); // Очистка буфера ввода
@@ -16,10 +15,8 @@ public class MakeFramePrototypeWithSlot implements MakeFramePrototype, Constants
             String slotName = SCANNER.nextLine();
             System.out.print("Введите значение слота: ");
             String slotValue = SCANNER.nextLine();
-            searchPrototype.addSlot(slotName, slotValue);
+            frame.addSlot(slotName, slotValue);
         }
-        return searchPrototype;
-
+        return frame;
     }
-
 }

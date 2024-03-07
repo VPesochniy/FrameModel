@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class FrameService implements Constants {
@@ -30,15 +31,35 @@ public class FrameService implements Constants {
     }
 
     public void displayAllFrames() {
-        if (frames.isEmpty()) {
-            System.out.println("Список пуст");
-        } else {
+        if (!frames.isEmpty()) {
             System.out.println("\n\n\t\tНачало списка\n\n");
             for (Frame fr : frames) {
                 System.out.println(fr.toString());
             }
             System.out.println("\n\n\t\tКонец списка\n\n");
+        } else {
+            System.out.println("Список пуст");
+        }
+    }
 
+    public void displayAllFrames(boolean isCount) {
+        if (!frames.isEmpty()) {
+            System.out.println("\n\n\t\tНачало списка\n\n");
+            int counter = 1;
+            for (Frame fr : frames) {
+                if (isCount) {
+
+                    System.out.println(counter + ". " + fr.toString());
+                    counter++;
+                } else {
+
+                    System.out.println(fr.toString());
+                }
+
+            }
+            System.out.println("\n\n\t\tКонец списка\n\n");
+        } else {
+            System.out.println("Список пуст");
         }
     }
 
@@ -46,27 +67,9 @@ public class FrameService implements Constants {
         return frames;
     }
 
-    public List<Frame> findFramesByName(List<Frame> frames, Frame prototype) {
-        FindFrame ff = new FindFrameByName();
-        return ff.find(frames, prototype);
-    }
-
     public void addFrame() {
-        System.out.print("Введите название фрейма: ");
-        String frameName = SCANNER.nextLine();
-        Frame frame = new Frame(frameName);
-        System.out.print("Введите количество слотов: ");
-        int slotsCount = SCANNER.nextInt();
-        SCANNER.nextLine(); // очистка буфера после ввода числа
-        for (int i = 0; i < slotsCount; i++) {
-            System.out.print("Введите название слота: ");
-            String slotName = SCANNER.nextLine();
-            System.out.print("Введите значение слота: ");
-            String slotValue = SCANNER.nextLine();
-            frame.addSlot(slotName, slotValue);
-        }
-        frames.add(frame);
-        System.out.println("Фрейм успешно добавлен\n\n");
+        frames.add(MakeFrame.getFrame());
+        System.out.println("\n\nФрейм успешно добавлен\n\n");
     }
 
     public void searchFrameBySlot() {
@@ -75,9 +78,14 @@ public class FrameService implements Constants {
 
         FindFrame ff = new FindFrameBySlot();
         List<Frame> matchingFrames = ff.find(frames, searchPrototype);
-        System.out.println("\n\nНайденные фреймы:\n\n");
-        for (Frame frame : matchingFrames) {
-            System.out.println(frame.toString());
+        if (!matchingFrames.isEmpty()) {
+            System.out.println("\n\nНайденные фреймы:\n\n");
+            for (Frame frame : matchingFrames) {
+                System.out.println(frame.toString());
+            }
+
+        } else {
+            System.out.println("\n\nСписок пуст\n\n");
         }
 
     }
@@ -88,10 +96,31 @@ public class FrameService implements Constants {
 
         FindFrame ff = new FindFrameByName();
         List<Frame> matchingFrames = ff.find(frames, searchPrototype);
-        System.out.println("\n\nНайденные фреймы:\n\n");
-        for (Frame frame : matchingFrames) {
-            System.out.println(frame.toString());
+        if (!matchingFrames.isEmpty()) {
+            System.out.println("\n\nНайденные фреймы:\n\n");
+            for (Frame frame : matchingFrames) {
+                System.out.println(frame.toString());
+            }
+
+        } else {
+            System.out.println("\n\nСписок пуст\n\n");
         }
+
+    }
+
+    public void updateFrame() {
+
+    }
+
+    public void deleteFrame() {
+        displayAllFrames(true);
+        System.out.print("\n\nВведите номер фрейма для удаления: ");
+        while (!SCANNER.hasNextInt()) {
+            System.out.println("Ошибка! Пожалуйста, введите целое число:");
+            SCANNER.next(); // Очистка буфера ввода
+        }
+        int frameNumber = SCANNER.nextInt();
+        SCANNER.nextLine(); // очистка буфера после ввода числа
 
     }
 }

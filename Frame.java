@@ -20,11 +20,11 @@ class Frame implements Serializable {
         this.linkedFrames = new ArrayList<>();
     }
 
-    public void addSlot(String slotName, String value) {
+    public void addSlot(Object slotName, String value) {
         slots.put(slotName, value);
     }
 
-    public void removeSlot(String slotName) {
+    public void removeSlot(Object slotName) {
         slots.remove(slotName);
     }
 
@@ -32,7 +32,7 @@ class Frame implements Serializable {
         slots.clear();
     }
 
-    public void updateSlot(String slotName, String value) {
+    public void updateSlot(Object slotName, String value) {
         slots.put(slotName, value);
     }
 

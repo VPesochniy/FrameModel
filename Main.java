@@ -5,24 +5,38 @@ public class Main implements Constants {
         FrameService fs = FrameService.getService();
         fs.loadFrames();
         boolean exit = false;
+
         while (!exit) {
             System.out.println("\n\nМеню:");
-            System.out.println("1. Добавить фрейм");
-            System.out.println("2. Поиск фрейма");
-            System.out.println("3. Вывести все фреймы");
+            System.out.println("1. Вывести все фреймы");
+            System.out.println("2. Поиск фрейма по имени");
+            System.out.println("3. Поиск фрейма по слотам");
+            System.out.println("4. Добавить фрейм");
+            System.out.println("5. Изменить фрейм");
+            System.out.println("6. Удалить фрейм");
             System.out.println("q. Выход");
             System.out.print("\n\nВыберите действие: ");
             String choice = SCANNER.nextLine();
 
             switch (choice) {
                 case "1":
-                    fs.addFrame();
+                    fs.displayAllFrames();
                     break;
                 case "2":
-                    fs.searchFrameBySlot();
+                    fs.searchFrameByName();
                     break;
                 case "3":
-                    fs.displayAllFrames();
+                    fs.searchFrameBySlot();
+                    break;
+                case "4":
+                    fs.addFrame();
+                    break;
+                case "5":
+                    fs.updateFrame();
+                    System.out.println("пока пусто");
+                    break;
+                case "6":
+                    fs.deleteFrame();
                     break;
                 case "q":
                     System.out.println("\n\nВыход из программы...");
